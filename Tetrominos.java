@@ -1,12 +1,14 @@
 //Tyler Dolph, Jaden Torres 2021
-//TODO Tyler: Tetromino spawning/active block flag, sidebar
-//TODO Jaden: hard/soft drops, row completion
-//TODO collab: rotation
-//DONE: game window, gameplay grid, blocks/block colors
+
+//to do list:
+//Tyler: Tetromino spawning/active block flag, sidebar
+//Jaden: hard/soft drops, row completion
+//collab: rotation
+//done: game window, gameplay grid, blocks/block colors (needs revamping)
 
 import javax.swing.*;
 import java.awt.*;
-public class Engine2D extends JFrame { 
+public class Tetrominos extends JFrame { 
     //configurable variables
     //probably dont touch windowSize or root ever. i certainly wont.
     static String windowName = "Tetrominos"; //copyright friendly and technically correct https://en.wikipedia.org/wiki/Tetromino
@@ -16,6 +18,7 @@ public class Engine2D extends JFrame {
     int[] root = {14,37}; //top left corner of the gameplay grid (9, 32 is no gap. it's quirky like that)
 
     //systems variables
+    //TODO replace the ints in grid with a block object
     int[][] grid = new int[10][20]; //grid that makes up the gameplay area
 
     public Tetrominos(){
