@@ -1,6 +1,6 @@
 //Tyler Dolph, Jaden Torres 2021
 
-//to do list:
+//to do list: if i forgot something add it???? idk. i just like ticking things off from lists.
 //Tyler: Tetromino spawning/active block flag, sidebar
 //Jaden: hard/soft drops, row completion
 //collab: rotation
