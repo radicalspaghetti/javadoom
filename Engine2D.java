@@ -1,9 +1,13 @@
+//Tyler Dolph, Jaden Torres 2021
+//TODO: main game loop, separating inactive pieces from active ones, player input, active to inactive transition, piece types and spawning, UI, music, points, ETC.
+//DONE: game window, gameplay grid, blocks, block colors
+
 import javax.swing.*;
 import java.awt.*;
 public class Engine2D extends JFrame { 
     //configurable variables
     //probably dont touch windowSize or root ever. i certainly wont.
-    static String windowName = "Tetris";
+    static String windowName = "Tetrominos"; //copyright friendly and technically correct https://en.wikipedia.org/wiki/Tetromino
     Color backgroundColor = Color.WHITE;
     private Color[] colors = new Color[]{Color.black, Color.orange, Color.blue}; //colors (0 is black (the grid), 1 is orange, 2 is blue, etc)
     int[] windowSize = {391,391}; 
@@ -13,6 +17,7 @@ public class Engine2D extends JFrame {
     int[][] grid = new int[10][20]; //grid that makes up the gameplay area
 
     public Engine2D(){
+        //make the window and set the size and background color (note: the background will probably need to be updated in the main loop with every frame)
         super(windowName);
         getContentPane().setBackground(backgroundColor);
         setSize(windowSize[0],windowSize[1]);
@@ -30,7 +35,7 @@ public class Engine2D extends JFrame {
     void draw(Graphics graphics){
         //=========================================================
         //test blocks
-        grid[0]=new int[]{0,0,0,0,0,0,0,0,2,0}; //the blue one lo l
+        grid[0]=new int[]{0,0,0,0,0,0,0,0,2,0}; //the blue one lol
         grid[1]=new int[]{0,0,0,0,1,0,0,0,2,0}; //im 12
         grid[2]=new int[]{0,0,0,1,1,1,0,2,0,2};
         //=========================================================
@@ -38,10 +43,10 @@ public class Engine2D extends JFrame {
         int x = root[0]; int y = root[1]; 
         for(int[] row : grid){
             for(int col : row){ 
-                if(x>=root[0]+200){x=root[0]; y+=20;}//go to the next line
+                if(x>=root[0]+200){x=root[0]; y+=20;} //go to the next row
                 //drawing the block if there is one
                 if(col>=1){ //zero is no block, so draw one if it's one or greater
-                    g2d.setColor(colors[col]); //set the block color to it's value in colors[]
+                    g2d.setColor(colors[col]); //set the block color to it's value in colors
                     g2d.setStroke(new BasicStroke(11f)); //set line thiccness to 1
                     g2d.drawRect(x+7, y+7, 5, 5);//draw the block
                 }
@@ -69,3 +74,22 @@ public class Engine2D extends JFrame {
         });
     }
 }
+
+//░░░░░░░░░░░▄▀▄▀▀▀▀▄▀▄░░░░░░░░░░░░░░░░░░ 
+//░░░░░░░░░░░█░░░░░░░░▀▄░░░░░░▄░░░░░░░░░░ 
+//░░░░░░░░░░█░░▀░░▀░░░░░▀▄▄░░█░█░░░░░░░░░ 
+//░░░░░░░░░░█░▄░█▀░▄░░░░░░░▀▀░░█░░░░░░░░░ 
+//░░░░░░░░░░█░░▀▀▀▀░░░░░░░░░░░░█░░░░░░░░░ 
+//░░░░░░░░░░█░░░░░░░░░░░░░░░░░░█░░░░░░░░░ 
+//░░░░░░░░░░█░░░░░░░░░░░░░░░░░░█░░░░░░░░░ 
+//░░░░░░░░░░░█░░▄▄░░▄▄▄▄░░▄▄░░█░░░░░░░░░░ 
+//░░░░░░░░░░░█░▄▀█░▄▀░░█░▄▀█░▄▀░░░░░░░░░░ 
+//░░░░░░░░░░░░▀░░░▀░░░░░▀░░░▀░░░░░░░░░░░░ 
+//╔═════════════════════════════════════╗
+//║ * You feel like you're going to     ║
+//║ have a ruff time.                   ║
+//║                                     ║
+//╚═════════════════════════════════════╝
+//┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐
+//│/ FIGHT| │ ) PET | |6 ITEM | |X MERCY| 
+//└───────┘ └───────┘ └───────┘ └───────┘
