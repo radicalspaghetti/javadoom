@@ -40,9 +40,9 @@ public class Tetrominos extends JFrame {
     void draw(Graphics graphics){
         //=========================================================
         //test blocks
-        grid[0]=new int[]{0,0,0,0,0,0,0,0,2,0}; //the blue one lol
-        grid[1]=new int[]{0,0,0,0,1,0,0,0,2,0}; //im 12
-        grid[2]=new int[]{0,0,0,1,1,1,0,2,0,2};
+        grid[0]=new int[]{0,0,0,0,0,0,0,2,0,0}//the blue one lol
+        grid[1]=new int[]{0,0,0,0,1,0,0,2,0,0}; //im 12
+        grid[2]=new int[]{0,0,0,1,1,1,0,2,2,0};
         //=========================================================
         Graphics2D g2d = (Graphics2D) graphics;
         int x = root[0]; int y = root[1]; 
