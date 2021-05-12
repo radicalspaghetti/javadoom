@@ -29,12 +29,6 @@ public class Tetrominos extends JFrame {
         //magic
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
-
-
-
-
-        //main loop goes here??????
     }
     //draw the board and blocks
     void draw(Graphics graphics){
