@@ -4,8 +4,11 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.awt.event.KeyAdapter;              
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
 public class Quake_me_baby_one_more_time{
@@ -14,6 +17,7 @@ public class Quake_me_baby_one_more_time{
     static int[] windowSize = {600,600};
     static Color[] colors = new Color[]{Color.black, Color.orange, Color.blue};
     public static Player player = new Player(windowSize[0]/2f, windowSize[1]/2f,0f);
+    public static ArrayList<Integer> keys = new ArrayList<Integer>();
 //=============================================
     public static void main(String[] args){
         grid[3][15]=1;
@@ -23,6 +27,10 @@ public class Quake_me_baby_one_more_time{
         frame.setSize(windowSize[0],windowSize[1]);
         frame.setTitle("Quake Me Baby One More Time");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //keyboard stuff
+        KeyListener input = new Input();
+		frame.addKeyListener(input);
+		frame.setFocusable(true);
         //=============================================
         JPanel renderPanel = new JPanel() {
             public void paintComponent(Graphics g) {
@@ -74,13 +82,24 @@ public class Quake_me_baby_one_more_time{
         public float rot(){return rot;}
     }
 //=============================================
-    public class KeyInput extends KeyAdapter {
-        public void keyPressed(KeyEvent d){
-            //do stuff if the d key is pressed
+    public static class Input implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent e) {}//balls
+        @Override
+        public void keyPressed(KeyEvent e) {
+            System.out.println("key pressed: "+e.getKeyCode());
+            if(!keys.contains(e.getKeyCode())){
+                keys.add(e.getKeyCode());
+            }
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {
+            System.out.println("key released: "+e.getKeyCode());
+            keys.remove(keys.indexOf(e.getKeyCode()));
         }
     }
-//=============================================
 }
+
 //
 //░▄▀▄▀▀▀▀▄▀▄░░░░░░░░░
 //░█░░░░░░░░▀▄░░░░░░▄░
