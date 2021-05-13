@@ -2,6 +2,9 @@
 //  https://youtu.be/NATtwV2SDOM
 
 import javax.swing.*;
+
+//import jdk.internal.org.jline.utils.Colors;
+
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
@@ -13,8 +16,8 @@ import java.awt.event.KeyListener;
 public class Quake_me_baby_one_more_time{
 //=============================================
     static int[][] grid = new int[25][25]; //grid that makes up the gameplay area
-    static int[] windowSize = {600,600};
-    static Color[] colors = new Color[]{Color.black, Color.orange, Color.blue};
+    static int[] windowSize = {517,540};
+    static Color[] colors = new Color[]{Color.black, Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.pink};
     public static Player player = new Player(windowSize[0]/2f, windowSize[1]/2f,0f);
     public static ArrayList<Integer> keys = new ArrayList<Integer>();
 //=============================================
@@ -35,12 +38,15 @@ public class Quake_me_baby_one_more_time{
             public void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 draw(g2);
+
             }
         };
         pane.add(renderPanel, BorderLayout.CENTER);
         frame.setVisible(true);
 
-
+        int y = 0;
+        int x = 0;
+        int z = 1;
         while(true){
             if(keys.contains(39)){
                 player.rot-=.2;
@@ -48,8 +54,16 @@ public class Quake_me_baby_one_more_time{
                 player.deltaX=(float)(Math.cos(player.rot)*5); 
                 player.deltaY=(float)(Math.sin(player.rot)*5); 
             }
-            System.out.println(keys.toString() +"  "+ player.rot);
-            draw(frame.getGraphics());
+            if(x>=grid[y].length){y+=1; x=0;}
+            if(y>=grid.length){y=0; x=0;} //z=z+1;}
+            if(keys.size()>0){z+=1;}
+            if(z>=colors.length){z=1;}
+            grid[y][x]=z;
+            x++;
+           // System.out.println(keys.toString() +"  "+ player.rot);
+           //System.out.println(frame.getHeight()+" "+frame.getWidth());
+            renderPanel.removeAll();
+            renderPanel.repaint();
         }
     }
 //=============================================
@@ -74,9 +88,7 @@ public class Quake_me_baby_one_more_time{
         }
         g.setColor(colors[2]);
         g.setStroke(new BasicStroke(3));
-        g.drawRect((int)player.x(), (int)player.y(), 5, 5);
-        //g.drawRoundRect((int)player.x(), (int)player.y(), 20, 20, 20, 20);
-
+        //g.drawRect((int)player.x(), (int)player.y(), 5, 5); //draw the player
     }
 //=============================================
     public static class Player{
