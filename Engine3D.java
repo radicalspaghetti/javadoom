@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 
+//http://blog.rogach.org/2015/08/how-to-create-your-own-simple-3d-render.html
+
 public class Engine3D {
 
     public static void main(String[] args) {
