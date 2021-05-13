@@ -10,7 +10,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-
 public class Quake_me_baby_one_more_time{
 //=============================================
     static int[][] grid = new int[25][25]; //grid that makes up the gameplay area
@@ -40,6 +39,18 @@ public class Quake_me_baby_one_more_time{
         };
         pane.add(renderPanel, BorderLayout.CENTER);
         frame.setVisible(true);
+
+
+        while(true){
+            if(keys.contains(39)){
+                player.rot-=.2;
+                if(player.rot<.0001){player.rot+=Math.PI*2;}
+                player.deltaX=(float)(Math.cos(player.rot)*5); 
+                player.deltaY=(float)(Math.sin(player.rot)*5); 
+            }
+            System.out.println(keys.toString() +"  "+ player.rot);
+            draw(frame.getGraphics());
+        }
     }
 //=============================================
     public static void draw(Graphics graphics){
@@ -72,6 +83,8 @@ public class Quake_me_baby_one_more_time{
         public float x; // x coordinate
         public float y; //y coordinate
         public float rot; //rotation
+        public float deltaX = 0;
+        public float deltaY = 0;
         Player(float x,float y,float rot){
             this.x=x;
             this.y=y;
@@ -87,14 +100,14 @@ public class Quake_me_baby_one_more_time{
         public void keyTyped(KeyEvent e) {}//balls
         @Override
         public void keyPressed(KeyEvent e) {
-            System.out.println("key pressed: "+e.getKeyCode());
+            //System.out.println("key pressed: "+e.getKeyCode());
             if(!keys.contains(e.getKeyCode())){
                 keys.add(e.getKeyCode());
             }
         }
         @Override
         public void keyReleased(KeyEvent e) {
-            System.out.println("key released: "+e.getKeyCode());
+            //System.out.println("key released: "+e.getKeyCode());
             keys.remove(keys.indexOf(e.getKeyCode()));
         }
     }
