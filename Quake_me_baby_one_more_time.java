@@ -18,12 +18,12 @@ public class Quake_me_baby_one_more_time{
     static int[][] grid = new int[][]{
 {2,2,2,2,2,2,2,2,2,2}, //grid that makes up the gameplay area
 {2,0,0,0,0,0,0,0,0,2},
-{2,0,2,2,2,2,2,0,0,2},
-{2,0,2,0,0,0,0,0,0,2},
-{2,0,2,0,0,0,0,0,0,2},
-{2,0,2,0,0,0,0,0,0,2},
-{2,0,2,0,0,0,0,0,0,2},
-{2,0,0,0,0,0,0,0,0,2},
+{2,0,2,0,2,2,2,2,0,2},
+{2,0,2,0,0,0,0,2,0,2},
+{2,0,2,0,0,0,0,2,0,2},
+{2,0,2,0,0,0,0,2,0,2},
+{2,0,2,0,0,0,0,2,0,2},
+{2,0,2,2,2,2,2,2,0,2},
 {2,0,0,0,0,0,0,0,0,2},
 {2,2,2,2,2,2,2,2,2,2},
 };
@@ -97,7 +97,7 @@ public class Quake_me_baby_one_more_time{
         int dof, mx, my;
         int dofMax = 8;
         double rayX = player.x, rayY=player.y, xOffset = 0f, yOffset = 0f;
-        for(int r=0; r<60; r++){ //raycasting time babeyyyyyy (it is spaghetti)
+        for(int r=0; r<120; r++){ //raycasting time babeyyyyyy (it is spaghetti)
             //horizontal gridlines ================================
             dof=0;
             double aTan = -1/Math.tan(rayAng);
@@ -124,10 +124,10 @@ public class Quake_me_baby_one_more_time{
             double PI2=Math.PI/2; double PI3=3*PI2;
             //vertical gridlines ================================
             dof=0;
-            double nTan = -Math.tan(rayAng);
+            double nTan = Math.tan(rayAng)*-1;
             double distV=Integer.MAX_VALUE; int vx=(int)player.x; int vy=(int)player.y;
             if(rayAng>PI2&&rayAng<PI3){ //looking left
-                rayX=((((int)player.x>>6)<<6)-0.0001); //evil bitshifting. how vile.
+                rayX=(((int)player.x>>6)<<6)-0.0001; //evil bitshifting. how vile.
                 rayY=(player.x-rayX)*nTan+player.y;
                 xOffset=-gridSize; yOffset=-xOffset*nTan;
             }
@@ -136,23 +136,26 @@ public class Quake_me_baby_one_more_time{
                 rayY=(player.x-rayX)*nTan+player.y;
                 xOffset=gridSize; yOffset=-xOffset*nTan;
             }
-            if(rayAng==0||rayAng==Math.PI){rayX=player.x; rayY=player.y; dof=dofMax;}//looking directly up or down
+           // if(rayAng==0||rayAng==Math.PI){rayX=player.x; rayY=player.y; dof=dofMax;}//looking directly up or down
             while(dof<dofMax){
                 mx=(int)(rayX)>>6; my=(int)(rayY)>>6; //set x and y of ray's hit location
                 if(mx>=0&&my>=0&&my<grid.length&&mx<grid[my].length&&grid[my][mx]>0){
-                    vx=(int)rayX; vy=(int)rayY; distH=dist(player.x,player.y,vx,vy,rayAng); dof=dofMax;
+                    vx=(int)rayX; vy=(int)rayY; distV=dist(player.x,player.y,vx,vy,rayAng); dof=dofMax;
                 } //hit a wall :D
                 else{rayX+=xOffset; rayY+=yOffset; dof+=1;} //didn't hit a wall, add offsets and inumerate dof
             }
             //drawing rays ================================
             //if(distH<distV&&(hx!=player.x&&hy!=player.y)){rayX=hx; rayY=hy;}
-            if(distV<distH){rayX=vx; rayY=vy;}
-            if(distV>distH){rayX=hx; rayY=hy;}
+            //if(distV<distH){rayX=vx; rayY=vy;}
+            if(distV>=distH){rayX=hx; rayY=hy;}
+            //else{rayX=player.x; rayY=player.y;}
             
             g.setColor(Color.orange);
-            g.setStroke(new BasicStroke(2));
-            g.drawLine((int)player.x,(int)player.y,(int)rayX,(int)rayY);
-            rayAng+=radian;
+            g.setStroke(new BasicStroke(4));
+            if(player.x!=rayX&&player.y!=rayY){
+                g.drawLine((int)player.x,(int)player.y,(int)rayX,(int)rayY);
+            }
+            rayAng+=radian/2;
         }
 
 
