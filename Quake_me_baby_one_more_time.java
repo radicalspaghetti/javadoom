@@ -97,7 +97,6 @@ public class Quake_me_baby_one_more_time{
     //TODO clean drawMain
     public static void drawMain(Graphics2D g){ //FIXME: at a certain player rotation, some of the raycasts break. why??? has I ever??????
         double radian = 0.0174533; //one radian in degrees, used for degree-to-radian conversion
-        int lineY = 0; //I forgot what this does but if I remove it everything breaks
         double rayAng=player.ang-radian*30; //the angle of the first ray
         if(rayAng<0){rayAng+=2*Math.PI;} //TODO move this stuff to a func
         if(rayAng>2*Math.PI){rayAng-=2*Math.PI;}
@@ -190,7 +189,6 @@ public class Quake_me_baby_one_more_time{
 
             //inumerating variables
             rayAng+=radian/4;
-            lineY+=(windowSize[1]/240);
         }
     }
     //=============================================
