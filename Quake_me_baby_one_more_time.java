@@ -16,7 +16,7 @@ import java.awt.event.KeyListener;
 public class Quake_me_baby_one_more_time{
 //=============================================
     static int[][] grid = new int[][]{
-{2,2,2,2,2,2,2,2,2,2}, //grid that makes up the gameplay area
+{2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}, //grid that makes up the gameplay area
 {2,0,0,0,0,0,0,0,0,2},
 {2,0,2,0,2,2,2,2,0,2},
 {2,0,2,0,0,0,0,2,0,2},
@@ -76,6 +76,7 @@ public class Quake_me_baby_one_more_time{
             renderPanel.removeAll();
             renderPanel.revalidate();
             renderPanel.repaint();
+            if(frame.getWidth()!=windowSize[0]||frame.getHeight()!=windowSize[1]){frame.setSize(windowSize[0],windowSize[1]);} //set window size if off
         }
     }
 //=============================================
