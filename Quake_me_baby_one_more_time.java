@@ -27,9 +27,9 @@ public class Quake_me_baby_one_more_time{
 {2,0,0,0,0,0,0,0,0,2},
 {2,2,2,2,2,2,2,2,2,2},
 };
-    static int[] windowSize = {733,680};
+    static int[] windowSize = {973,680};
     static Color[] colors = new Color[]{Color.black, Color.orange, Color.PINK, Color.blue, Color.cyan};
-    public static Player player = new Player(windowSize[0]/2f, windowSize[1]/2f,0f);
+    public static Player player = new Player(317, 317,0f);
     public static ArrayList<Integer> keys = new ArrayList<Integer>();
     public static int gridSize = 64;
 //=============================================
@@ -82,31 +82,30 @@ public class Quake_me_baby_one_more_time{
     public static void draw(Graphics graphics){
         Graphics2D g = (Graphics2D) graphics;
         //draw stuff here
-        drawBackground(g);
-        drawMain(g);
-        //drawMap(g);
+        drawBackground(g); 
+        drawMain(g); //3 D
+        //drawMap(g); //used for debugging, will be turned into minimap later
     }
     //=============================================
-    //TODO clean drawMain
     public static void drawBackground(Graphics2D g){
         g.setColor(Color.darkGray); //ground
-        g.setStroke(new BasicStroke(windowSize[0]));
-        g.drawRect(0,0,windowSize[0],windowSize[1]);
+        g.fillRect(0,windowSize[1]/2,windowSize[0],windowSize[1]); 
         g.setColor(new Color(75,0,130)); //sky
-        g.setStroke(new BasicStroke(windowSize[1]/2));
-        g.drawRect(0,windowSize[1]/4,windowSize[1],0);
+        g.fillRect(0,0,windowSize[0],windowSize[1]/2); 
     }
+    //TODO make ray number more easily changable
+    //TODO clean drawMain
     public static void drawMain(Graphics2D g){ //FIXME: at a certain player rotation, some of the raycasts break. why??? has I ever??????
-        double radian = 0.0174533;
-        int lineY = 0;
-        double rayAng=player.ang-radian*30;
-        if(rayAng<0){rayAng+=2*Math.PI;}
+        double radian = 0.0174533; //one radian in degrees, used for degree-to-radian conversion
+        int lineY = 0; //I forgot what this does but if I remove it everything breaks
+        double rayAng=player.ang-radian*30; //the angle of the first ray
+        if(rayAng<0){rayAng+=2*Math.PI;} //TODO move this stuff to a func
         if(rayAng>2*Math.PI){rayAng-=2*Math.PI;}
-        int dof, mx, my;
-        int dofMax = 8;
-        double dist = 0;
-        double rayX = player.x, rayY=player.y, xOffset = 0f, yOffset = 0f;
-        for(int r=0; r<120; r++){ //raycasting time babeyyyyyy (it is spaghetti)
+        int dof, mx, my; //integers babeyyyyyyyyyyyyyyyyy
+        int dofMax = 10; //maximum number of checks before moving on, stops infinite loops
+        double dist = 0; //ray distance. should probably move this down a bit.
+        double rayX = player.x, rayY=player.y, xOffset = 0f, yOffset = 0f; //doubles babeyyyyyyyyyyyyyyyyyyyyyyyyy
+        for(int r=0; r<240; r++){ //raycasting time (it is spaghetti)
             //horizontal gridlines ================================
             dof=0;
             double aTan = -1/Math.tan(rayAng);
@@ -165,7 +164,7 @@ public class Quake_me_baby_one_more_time{
             //TODO only works with gray bc im lazy ill fix it later
             double vdo = .1; //view distance multiplier, higher is darker, 0 is no shading 
             int falloff = 15; //adds to the shaded color's brightness. might be useful if we use a color other than g r a y, or use a texture
-            int original = 100; //original color of wall
+            int original = 110; //original color of wall
             int shade = original;
             double shadeAmt = dist*vdo-falloff;
             if(shade-shadeAmt>0){shade-=shadeAmt;}
@@ -180,22 +179,22 @@ public class Quake_me_baby_one_more_time{
             dist=dist*Math.cos(corrAng);
 
             //actually drawing them on the screen
-            //FIXME this is barf that wrote at midnight I need to fix this laterrrrrrrrrrrrrrrr,...
-            int xMult = 6; int yOffset2 = 415 ;
+            //FIXME this is actual barf that wrote at midnight I need to fix this laterrrrrrrrrrrrrrrr,...
+            int xMult = 4; int yOffset2 = 400 ;
             g.setColor(shadedColor);
-            g.setStroke(new BasicStroke(6));
+            g.setStroke(new BasicStroke(4));
             double lineHeight = gridSize*windowSize[1]/dist; //if(lineHeight > windowSize[0]){lineHeight=windowSize[0];}
-            double lineOffset = windowSize[0]-lineHeight/2;
+            double lineOffset = windowSize[1]-lineHeight/2;
             g.drawLine(r*xMult, (int)lineOffset-yOffset2, r*xMult, (int)(lineHeight+lineOffset)-yOffset2);
             //g.drawLine((int)player.x,(int)player.y,(int)rayX,(int)rayY);
 
             //inumerating variables
-            rayAng+=radian/2;
-            lineY+=(windowSize[1]/120);
+            rayAng+=radian/4;
+            lineY+=(windowSize[1]/240);
         }
     }
     //=============================================
-    public static void drawMap(Graphics2D g){
+    public static void drawMap(Graphics2D g){ //TODO make this into a minimap
         int scale = 1; //scale of the map
         int size = gridSize/scale;
         for(int y = 0; y < grid.length; y++){
