@@ -16,7 +16,7 @@ import java.awt.event.KeyListener;
 public class Quake_me_baby_one_more_time{
 //=============================================
     static int[][] grid = new int[][]{
-{2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}, //grid that makes up the gameplay area
+{2,2,2,2,2,2,2,2,2,2}, //grid that makes up the gameplay area
 {2,0,0,0,0,0,0,0,0,2},
 {2,0,2,0,2,2,2,2,0,2},
 {2,0,2,0,0,0,0,2,0,2},
@@ -84,8 +84,8 @@ public class Quake_me_baby_one_more_time{
         Graphics2D g = (Graphics2D) graphics;
         //draw stuff here
         drawBackground(g); 
-        drawMain(g); //3 D
-        //drawMap(g); //used for debugging, will be turned into minimap later
+        int[][] rays = drawMain(g); //3 D
+        //drawMap(g, rays); //used for debugging, will be turned into minimap later
     }
     //=============================================
     public static void drawBackground(Graphics2D g){
@@ -96,7 +96,8 @@ public class Quake_me_baby_one_more_time{
     }
     //TODO make ray number more easily changable
     //TODO clean drawMain
-    public static void drawMain(Graphics2D g){ //FIXME: at a certain player rotation, some of the raycasts break. why??? has I ever??????
+    public static int[][] drawMain(Graphics2D g){ //FIXME: at a certain player rotation, some of the raycasts break. why??? has I ever??????
+        int rayNum = 240;
         double radian = 0.0174533; //one radian in degrees, used for degree-to-radian conversion
         double rayAng=player.ang-radian*30; //the angle of the first ray
         if(rayAng<0){rayAng+=2*Math.PI;} //TODO move this stuff to a func
@@ -105,7 +106,8 @@ public class Quake_me_baby_one_more_time{
         int dofMax = 10; //maximum number of checks before moving on, stops infinite loops
         double dist = 0; //ray distance. should probably move this down a bit.
         double rayX = player.x, rayY=player.y, xOffset = 0f, yOffset = 0f; //doubles babeyyyyyyyyyyyyyyyyyyyyyyyyy
-        for(int r=0; r<240; r++){ //raycasting time (it is spaghetti)
+        int[][] rays = new int[rayNum][2];
+        for(int r=0; r<rayNum; r++){ //raycasting time (it is spaghetti)
             //horizontal gridlines ================================
             dof=0;
             double aTan = -1/Math.tan(rayAng);
@@ -187,13 +189,18 @@ public class Quake_me_baby_one_more_time{
             double lineOffset = windowSize[1]-lineHeight/2;
             g.drawLine(r*xMult, (int)lineOffset-yOffset2, r*xMult, (int)(lineHeight+lineOffset)-yOffset2);
             //g.drawLine((int)player.x,(int)player.y,(int)rayX,(int)rayY);
+            rays[r][0]=(int)rayX; rays[r][1]=(int)rayY; 
 
             //inumerating variables
-            rayAng+=radian/4;
+            rayAng+=radian/4; 
+
         }
+        //return all of the rays that were cast for the minimap to use 
+        return rays;
     }
     //=============================================
-    public static void drawMap(Graphics2D g){ //TODO make this into a minimap
+    public static void drawMap(Graphics2D g, int[][] rays){ //TODO make this into a minimap
+        boolean drawRays=true;
         int scale = 1; //scale of the map
         int size = gridSize/scale;
         for(int y = 0; y < grid.length; y++){
@@ -211,15 +218,25 @@ public class Quake_me_baby_one_more_time{
                 g.drawRect(x*size, y*size, size, size);//draw gridline
             }
         }
-        //draw the player's direction line =========================
+
+        //draw the rays
+        g.setColor(Color.white);
+        g.setStroke(new BasicStroke(1));
+        if(drawRays){
+            for(int[]ray : rays){g.drawLine((int)player.x, (int)player.y, ray[0], ray[1]);}
+        }
+
+        //draw a line to show the player's direction 
         int line = 10;
         g.setColor(colors[4]);
         g.setStroke(new BasicStroke(2));
         g.drawLine((int)player.x,(int)player.y,(int)(player.x+player.deltaX*line),(int)(player.y+player.deltaY*line));
-        //draw the player on the map================================
+        //draw the player
+
         g.setColor(colors[3]);
         g.setStroke(new BasicStroke(10));
         g.drawRect((int)player.x, (int)player.y, 0, 0); //draw the player
+
     }
     public static double dist(double ax, double ay, double bx, double by, double ang){return(Math.sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay)));} //pythagorean theorem
 //=============================================
