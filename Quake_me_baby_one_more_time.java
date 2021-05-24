@@ -117,12 +117,12 @@ public class Quake_me_baby_one_more_time{
                 rayX=(player.y-rayY)*aTan+player.x;
                 yOffset=-gridSize; xOffset=-yOffset*aTan;
             }
-            if(rayAng<Math.PI){ //looking down
+            else{//if(rayAng<Math.PI){ //looking down
                 rayY=(((int)player.y>>6)<<6)+gridSize;
                 rayX=(player.y-rayY)*aTan+player.x;
                 yOffset=gridSize; xOffset=-yOffset*aTan;
             }
-            if(rayAng==0||rayAng==Math.PI){rayX=player.x; rayY=player.y; dof=dofMax;}//looking directly right or left
+            //if(rayAng==0||rayAng==Math.PI){rayX=player.x; rayY=player.y; dof=dofMax;}//looking directly right or left
             while(dof<dofMax){
                 mx=(int)(rayX)>>6; my=(int)(rayY)>>6; //set x and y of ray's hit location
                 if(mx>=0&&my>=0&&my<grid.length&&mx<grid[my].length&&grid[my][mx]>0){ //hit a wall :D
