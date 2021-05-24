@@ -92,7 +92,7 @@ public class Quake_me_baby_one_more_time{
         //draw stuff here
         drawBackground(g); 
         int[][] rays = drawMain(g); //3 D
-        //drawMap(g, rays); //used for debugging, will be turned into minimap later
+        drawMap(g, rays); //used for debugging, will be turned into minimap later
     }
     //=============================================
     public static void drawBackground(Graphics2D g){
@@ -118,14 +118,14 @@ public class Quake_me_baby_one_more_time{
             //horizontal gridlines ================================
             dof=0;
             double aTan = -1/Math.tan(rayAng);
-            double distH=Integer.MAX_VALUE; int hx=(int)player.x; int hy=(int)player.y;
+            double distH=2147483647; int hx=(int)player.x; int hy=(int)player.y;
             if(rayAng>Math.PI){ //looking up
-                rayY=((((int)player.y>>6)<<6)-0.0001); //evil bitshifting. how vile.
+                rayY=(((int)player.y>>6)<<6)-0.0001; //evil bitshifting. how vile.
                 rayX=(player.y-rayY)*aTan+player.x;
                 yOffset=-gridSize; xOffset=-yOffset*aTan;
             }
-            else if (rayAng<Math.PI){ //looking down
-                rayY=((((int)player.y>>6)<<6)+gridSize);
+            if(rayAng<Math.PI){ //looking down
+                rayY=(((int)player.y>>6)<<6)+gridSize;
                 rayX=(player.y-rayY)*aTan+player.x;
                 yOffset=gridSize; xOffset=-yOffset*aTan;
             }
@@ -169,6 +169,8 @@ public class Quake_me_baby_one_more_time{
             if(distV>distH){rayX=hx; rayY=hy; dist = distH;}
                     //else{rayX=player.x; rayY=player.y;}
 
+            //rayX=vx; rayY=vy; dist = distV;
+            rayX=hx; rayY=hy; dist = distH;
             //shading OwO 
             //TODO only works with gray bc im lazy ill fix it later
             double vdo = .1; //view distance multiplier, higher is darker, 0 is no shading 
@@ -284,6 +286,25 @@ public class Quake_me_baby_one_more_time{
             keys.remove(keys.indexOf(e.getKeyCode()));
         }
     }
+//=============================================
+    public static void drawMain2(Graphics g){
+
+    }
+    public static class Player2{ //TODO: move player-related code to the player class to avoid spaghetti
+        public float x; public float y; 
+        public float ang; //rotation
+        public float deltaX = 1; public float deltaY = 1;
+        public float xPlane; public float yPlane;
+        Player2(float x,float y,float rot,float xp, float yp){
+            this.x=x;
+            this.y=y;
+            this.ang=rot;
+            this.xPlane=xp;
+            this.yPlane=yp;
+        }
+    }
+
+//=============================================
 }
 
 //        /\_____/\
