@@ -43,8 +43,8 @@ public class Quake_me_baby_one_more_time{
         frame.setSize(windowSize[0],windowSize[1]);
         //keyboard stuff
         KeyListener input = new Input();
-		frame.addKeyListener(input);
-		frame.setFocusable(true);
+        frame.addKeyListener(input);
+        frame.setFocusable(true);
         //=============================================
         JPanel renderPanel = new JPanel() {
             public void paintComponent(Graphics g) {
@@ -58,6 +58,7 @@ public class Quake_me_baby_one_more_time{
         //main loop TODO make loop speed not dependant on system performance
         float rotationSpeed = .00000055f;
         while(true){
+            
             if(keys.contains(37)||keys.contains(65)){ //right rotation
                 player.ang-=rotationSpeed;
                 if(player.ang<.0001){player.ang+=Math.PI*2;}
@@ -70,7 +71,13 @@ public class Quake_me_baby_one_more_time{
                 player.deltaX=(float)(Math.cos(player.ang)*5); 
                 player.deltaY=(float)(Math.sin(player.ang)*5); 
             }
-            //TODO movement
+            //TODO movemewnt
+            if(keys.contains(38) || keys.contains(87)){
+                player.speed = 1;
+            }
+            if(keys.contains(40) || keys.contains(83)){
+                player.speed = -1;
+            }
            // System.out.println(keys.toString() +"  "+ player.rot);
            //System.out.println(frame.getHeight()+" "+frame.getWidth());
             renderPanel.removeAll();
@@ -246,13 +253,21 @@ public class Quake_me_baby_one_more_time{
         public float x; // x coordinate
         public float y; //y coordinate
         public float ang; //rotation
+        float rotationSpeed = .00000055f;
         public float deltaX = 1;
         public float deltaY = 1;
+        public int speed = 0;//movement
         Player(float x,float y,float rot){
             this.x=x;
             this.y=y;
             this.ang=rot;
         }
+        newPosition Player(float x, float y, float rot, int speed){
+            this.ang += this.rotationSpeed * Math.PI / 180;
+            this.x += this.speed * Math.sin(this.ang);
+            this.y -= this.speed * Math.cos(this.ang);
+        }
+        
     }
 //=============================================
     public static class Input implements KeyListener {
