@@ -71,15 +71,19 @@ public class Quake_me_baby_one_more_time{
                 player.deltaX=(float)(Math.cos(player.ang)*5); 
                 player.deltaY=(float)(Math.sin(player.ang)*5); 
             }
-            //TODO movemewnt
+            float speed = .0001f;
+            //TODO movemewnt uwu
             if(keys.contains(38) || keys.contains(87)){
-                player.speed = 1;
+                player.speed = speed;
             }
-            if(keys.contains(40) || keys.contains(83)){
-                player.speed = -1;
+            else if(keys.contains(40) || keys.contains(83)){
+                player.speed = speed*-1;
             }
+            else{player.speed=0;}
+            player.setSpeed();
            // System.out.println(keys.toString() +"  "+ player.rot);
            //System.out.println(frame.getHeight()+" "+frame.getWidth());
+           //System.out.print(player.speed);
             renderPanel.removeAll();
             renderPanel.revalidate();
             renderPanel.repaint();
@@ -170,7 +174,7 @@ public class Quake_me_baby_one_more_time{
                     //else{rayX=player.x; rayY=player.y;}
 
             //rayX=vx; rayY=vy; dist = distV;
-            rayX=hx; rayY=hy; dist = distH;
+            //rayX=hx; rayY=hy; dist = distH;
             //shading OwO 
             //TODO only works with gray bc im lazy ill fix it later
             double vdo = .1; //view distance multiplier, higher is darker, 0 is no shading 
@@ -256,16 +260,16 @@ public class Quake_me_baby_one_more_time{
         float rotationSpeed = .00000055f;
         public float deltaX = 1;
         public float deltaY = 1;
-        public int speed = 0;//movement
+        public float speed = 0;//your mom owo
         Player(float x,float y,float rot){
             this.x=x;
             this.y=y;
             this.ang=rot;
         }
-        newPosition Player(float x, float y, float rot, int speed){
-            this.ang += this.rotationSpeed * Math.PI / 180;
-            this.x += this.speed * Math.sin(this.ang);
-            this.y -= this.speed * Math.cos(this.ang);
+        public void setSpeed(){
+            //ang += rotationSpeed * Math.PI / 180;
+            x += speed * Math.sin(ang);
+            y -= speed * Math.cos(ang);
         }
         
     }
