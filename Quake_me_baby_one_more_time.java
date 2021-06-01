@@ -75,12 +75,21 @@ public class Quake_me_baby_one_more_time{
             //TODO movemewnt uwu
             if(keys.contains(38) || keys.contains(87)){
                 player.speed = speed;
+                //if(){player.speed = speed;}
+                //else{player.speed = speed*-1;}
             }
             else if(keys.contains(40) || keys.contains(83)){
                 player.speed = speed*-1;
+                //if(){player.speed = speed*-1;}
+                //else{player.speed = speed;}
             }
             else{player.speed=0;}
             player.setSpeed();
+            //int x = player.getX; 
+            //int y = player.getY;
+            //if(grid[x][y] == 2){
+              //  player.speed = speed * -1;
+            //}
            // System.out.println(keys.toString() +"  "+ player.rot);
            //System.out.println(frame.getHeight()+" "+frame.getWidth());
            //System.out.print(player.speed);
@@ -261,6 +270,7 @@ public class Quake_me_baby_one_more_time{
         public float deltaX = 1;
         public float deltaY = 1;
         public float speed = 0;//your mom owo
+        public boolean coll = false;
         Player(float x,float y,float rot){
             this.x=x;
             this.y=y;
@@ -268,8 +278,8 @@ public class Quake_me_baby_one_more_time{
         }
         public void setSpeed(){
             //ang += rotationSpeed * Math.PI / 180;
-            x += speed * Math.sin(ang);
-            y -= speed * Math.cos(ang);
+            x += speed * Math.sin(1);
+            y -= speed * Math.sin(-1);
         }
         
     }
