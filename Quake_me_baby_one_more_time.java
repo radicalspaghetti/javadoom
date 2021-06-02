@@ -100,7 +100,7 @@ public class Quake_me_baby_one_more_time{
         int rayy = (int)player.y;
         int mx=((int)rayx)>>6;
         int my=((int)rayy)>>6;
-
+        System.out.println(player.ang);
         if(keys.contains(38) || keys.contains(87)){
             if(grid[my][mx] == 2){player.speed = speed*-5;}
             else{player.speed = 2;}
@@ -272,15 +272,18 @@ public class Quake_me_baby_one_more_time{
         public float deltaY = 1;
         public float speed = 0;//your mom owo
         public boolean coll = false;
+        public float unit;
         Player(float x,float y,float rot){
             this.x=x;
             this.y=y;
             this.ang=rot;
         }
         public void setSpeed(){
-            x += this.speed * Math.sin(ang);
-            y -= this.speed* Math.cos(ang);
+            unit = ang - ((float)Math.PI*3/2);
+            x += speed * (float)Math.sin(unit);
+            y -= speed* (float)Math.cos(unit);
         }
+
         
     }
 //=============================================
