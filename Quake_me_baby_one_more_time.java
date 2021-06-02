@@ -84,7 +84,6 @@ public class Quake_me_baby_one_more_time{
             else{player.speed=0;}
             player.setSpeed();
             
-            
            // System.out.println(keys.toString() +"  "+ player.rot);
            //System.out.println(frame.getHeight()+" "+frame.getWidth());
            //System.out.print(player.speed);
@@ -100,7 +99,7 @@ public class Quake_me_baby_one_more_time{
         //draw stuff here
         drawBackground(g); 
         int[][] rays = drawMain(g); //3 D
-        //drawMap(g, rays); //used for debugging, will be turned into minimap later
+        drawMap(g, rays); //used for debugging, will be turned into minimap later
     }
     //=============================================
     public static void drawBackground(Graphics2D g){
@@ -170,7 +169,7 @@ public class Quake_me_baby_one_more_time{
             //drawing rays ================================
             //getting the shortest distance and setting variables accordingly
             if(distV<distH){rayX=vx; rayY=vy; dist = distV;}
-            if(distV>distH){rayX=hx; rayY=hy; dist = distH;}
+            else if(distV>distH){rayX=hx; rayY=hy; dist = distH;}
             else{rayX=player.x; rayY=player.y;}
             //shading OwO 
             //TODO only works with gray bc im lazy ill fix it later
@@ -208,21 +207,22 @@ public class Quake_me_baby_one_more_time{
     //=============================================
     public static void drawMap(Graphics2D g, int[][] rays){ //TODO make this into a minimap
         boolean drawRays=true;
-        int scale = 1; //scale of the map
+        int scale = 3; //scale modifier of the minimap (what it's positions are divided by)
         int size = gridSize/scale;
+        int offset = windowSize[0]-((grid[0].length*gridSize)/scale)-14; //not quite sure why the 14 is needed. probably a jframe thing
         for(int y = 0; y < grid.length; y++){
             for(int x = 0; x < grid[y].length; x++){
                 int col = grid[y][x];
                 if(col>=1){ //zero is no block, so draw one if it's one or greater
                     g.setColor(colors[col]); //set the block color to it's value in colors
                     g.setStroke(new BasicStroke(size)); //set line thiccness to gridsize
-                    g.drawRect((x*size)+(size/2), (y*size)+(size/2), 0,0);
+                    g.drawRect((x*size)+(size/2)+offset, (y*size)+(size/2), 0,0);
                     //the block size is zero, so it draws a filled square of the stroke size
                 }
                 //drawing the gridlines
                 g.setColor(colors[0]); //set color to black.
                 g.setStroke(new BasicStroke(1f)); //set line thiccness
-                g.drawRect(x*size, y*size, size, size);//draw gridline
+                g.drawRect(x*size+offset, y*size, size, size);//draw gridline
             }
         }
 
@@ -230,17 +230,17 @@ public class Quake_me_baby_one_more_time{
         g.setColor(Color.white);
         g.setStroke(new BasicStroke(1));
         if(drawRays){
-            for(int[]ray : rays){g.drawLine((int)player.x, (int)player.y, ray[0], ray[1]);}
+            for(int[]ray : rays){g.drawLine((int)player.x/scale+offset, (int)player.y/scale, ray[0]/scale+offset, ray[1]/scale);}
         }
         //draw a line to show the player's direction 
-        int line = 10;
-        g.setColor(colors[4]);
-        g.setStroke(new BasicStroke(2));
-        g.drawLine((int)player.x,(int)player.y,(int)(player.x+player.deltaX*line),(int)(player.y+player.deltaY*line));
+        //int line = 10;
+        //g.setColor(colors[4]);
+        //g.setStroke(new BasicStroke(2));
+        //g.drawLine((int)player.x/scale,(int)player.y/scale,(int)(player.x+player.deltaX*line)/scale,(int)(player.y+player.deltaY*line)/scale);
         //draw the player
         g.setColor(colors[3]);
-        g.setStroke(new BasicStroke(10));
-        g.drawRect((int)player.x, (int)player.y, 0, 0); //draw the player
+        g.setStroke(new BasicStroke(20/scale));
+        g.drawRect((int)player.x/scale+offset, (int)player.y/scale, 0, 0); //draw the player
     }
     public static double dist(double ax, double ay, double bx, double by, double ang){return(Math.sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay)));} //pythagorean theorem
 //=============================================
