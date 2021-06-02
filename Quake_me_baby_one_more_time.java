@@ -54,11 +54,9 @@ public class Quake_me_baby_one_more_time{
         };
         pane.add(renderPanel, BorderLayout.CENTER);
         frame.setVisible(true);
-
         //main loop TODO make loop speed not dependant on system performance
         float rotationSpeed = .00000055f;
         while(true){
-            
             if(keys.contains(37)||keys.contains(65)){ //right rotation
                 player.ang-=rotationSpeed;
                 if(player.ang<.0001){player.ang+=Math.PI*2;}
@@ -96,7 +94,7 @@ public class Quake_me_baby_one_more_time{
         //draw stuff here
         drawBackground(g); 
         int[][] rays = drawMain(g); //3 D
-        drawMap(g, rays); //used for debugging, will be turned into minimap later
+        //drawMap(g, rays); //used for debugging, will be turned into minimap later
     }
     //=============================================
     public static void drawBackground(Graphics2D g){
@@ -107,41 +105,39 @@ public class Quake_me_baby_one_more_time{
     }
     //TODO make ray number more easily changable
     //TODO clean drawMain
-    public static int[][] drawMain(Graphics2D g){ //FIXME: at a certain player rotation, some of the raycasts break. why??? has I ever??????
+    public static int[][] drawMain(Graphics2D g){
         int rayNum = 240;
         double radian = 0.0174533; //one radian in degrees, used for degree-to-radian conversion
         double rayAng=player.ang-radian*30; //the angle of the first ray
-        if(rayAng<0){rayAng+=2*Math.PI;} //TODO move this stuff to a func
-        if(rayAng>2*Math.PI){rayAng-=2*Math.PI;}
         int dof, mx, my; //integers babeyyyyyyyyyyyyyyyyy
-        int dofMax = 10; //maximum number of checks before moving on, stops infinite loops
+        int dofMax = 20; //maximum number of checks before moving on, stops infinite loops
         double dist = 0; //ray distance. should probably move this down a bit.
         double rayX = player.x, rayY=player.y, xOffset = 0f, yOffset = 0f; //doubles babeyyyyyyyyyyyyyyyyyyyyyyyyy
         int[][] rays = new int[rayNum][2];
         for(int r=0; r<rayNum; r++){ //raycasting time (it is spaghetti)
+            rayAng = CorrectRadians(rayAng);
             //horizontal gridlines ================================
             dof=0;
             double aTan = -1/Math.tan(rayAng);
             double distH=2147483647; int hx=(int)player.x; int hy=(int)player.y;
             if(rayAng>Math.PI){ //looking up
-                rayY=(((int)player.y>>6)<<6)-0.0001; //evil bitshifting. how vile.
+                rayY=((((int)player.y)>>6)<<6)-0.0001; //evil bitshifting. how vile.
                 rayX=(player.y-rayY)*aTan+player.x;
-                yOffset=-gridSize; xOffset=-yOffset*aTan;
+                yOffset=-64; xOffset=-yOffset*aTan;
             }
-            else{//if(rayAng<Math.PI){ //looking down
-                rayY=(((int)player.y>>6)<<6)+gridSize;
+            else if(rayAng<Math.PI){ //looking down
+                rayY=((((int)player.y)>>6)<<6)+64; 
                 rayX=(player.y-rayY)*aTan+player.x;
-                yOffset=gridSize; xOffset=-yOffset*aTan;
+                yOffset=64; xOffset=-yOffset*aTan;
             }
-            //if(rayAng==0||rayAng==Math.PI){rayX=player.x; rayY=player.y; dof=dofMax;}//looking directly right or left
+            if(rayAng==0||rayAng==Math.PI){rayX=player.x; rayY=player.y; dof=dofMax;}//looking directly right or left
             while(dof<dofMax){
-                mx=(int)(rayX)>>6; my=(int)(rayY)>>6; //set x and y of ray's hit location
+                mx=((int)rayX)>>6; my=((int)rayY)>>6; //set x and y of ray's hit location
                 if(mx>=0&&my>=0&&my<grid.length&&mx<grid[my].length&&grid[my][mx]>0){ //hit a wall :D
                     hx=(int)rayX; hy=(int)rayY; distH=dist(player.x,player.y,hx,hy,rayAng); dof=dofMax;
                 } 
                 else{rayX+=xOffset; rayY+=yOffset; dof+=1;} //didn't hit a wall, add offsets and inumerate dof
             }
-
             double PI2=Math.PI/2; double PI3=3*PI2;
             //vertical gridlines ================================
             dof=0;
@@ -166,15 +162,10 @@ public class Quake_me_baby_one_more_time{
                 else{rayX+=xOffset; rayY+=yOffset; dof+=1;} //didn't hit a wall, add offsets and inumerate dof
             }
             //drawing rays ================================
-
             //getting the shortest distance and setting variables accordingly
-                    //if(distH<distV&&(hx!=player.x&&hy!=player.y)){rayX=hx; rayY=hy;}
             if(distV<distH){rayX=vx; rayY=vy; dist = distV;}
             if(distV>distH){rayX=hx; rayY=hy; dist = distH;}
-                    //else{rayX=player.x; rayY=player.y;}
-
-            //rayX=vx; rayY=vy; dist = distV;
-            //rayX=hx; rayY=hy; dist = distH;
+            else{rayX=player.x; rayY=player.y;}
             //shading OwO 
             //TODO only works with gray bc im lazy ill fix it later
             double vdo = .1; //view distance multiplier, higher is darker, 0 is no shading 
@@ -182,20 +173,19 @@ public class Quake_me_baby_one_more_time{
             int original = 110; //original color of wall
             int shade = original;
             double shadeAmt = dist*vdo-falloff;
+            // if(dist==distV&&(rayAng<PI2||rayAng>PI3)){shade*=.7;} //basic shadows
             if(shade-shadeAmt>0){shade-=shadeAmt;}
             else{shade=0;}
             //System.out.println(shade);
             Color shadedColor = new Color(shade,shade,shade);
-
             //correct fisheye effect
             double corrAng=player.ang-rayAng; //corrected angle
             if(corrAng<0){corrAng+=2*Math.PI;} //TODO move the radian correcting code to a function, the same thing is called a few times
             if(corrAng>2*Math.PI){corrAng-=2*Math.PI;}
             dist=dist*Math.cos(corrAng);
-
             //actually drawing them on the screen
             //FIXME this is actual barf that wrote at midnight I need to fix this laterrrrrrrrrrrrrrrr,...
-            int xMult = 4; int yOffset2 = 400 ;
+            int xMult = 4; int yOffset2 = 330 ;
             g.setColor(shadedColor);
             g.setStroke(new BasicStroke(4));
             double lineHeight = gridSize*windowSize[1]/dist; //if(lineHeight > windowSize[0]){lineHeight=windowSize[0];}
@@ -203,10 +193,8 @@ public class Quake_me_baby_one_more_time{
             g.drawLine(r*xMult, (int)lineOffset-yOffset2, r*xMult, (int)(lineHeight+lineOffset)-yOffset2);
             //g.drawLine((int)player.x,(int)player.y,(int)rayX,(int)rayY);
             rays[r][0]=(int)rayX; rays[r][1]=(int)rayY; 
-
             //inumerating variables
             rayAng+=radian/4; 
-
         }
         //return all of the rays that were cast for the minimap to use 
         return rays;
@@ -238,18 +226,15 @@ public class Quake_me_baby_one_more_time{
         if(drawRays){
             for(int[]ray : rays){g.drawLine((int)player.x, (int)player.y, ray[0], ray[1]);}
         }
-
         //draw a line to show the player's direction 
         int line = 10;
         g.setColor(colors[4]);
         g.setStroke(new BasicStroke(2));
         g.drawLine((int)player.x,(int)player.y,(int)(player.x+player.deltaX*line),(int)(player.y+player.deltaY*line));
         //draw the player
-
         g.setColor(colors[3]);
         g.setStroke(new BasicStroke(10));
         g.drawRect((int)player.x, (int)player.y, 0, 0); //draw the player
-
     }
     public static double dist(double ax, double ay, double bx, double by, double ang){return(Math.sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay)));} //pythagorean theorem
 //=============================================
@@ -307,7 +292,11 @@ public class Quake_me_baby_one_more_time{
             this.yPlane=yp;
         }
     }
-
+    public static double CorrectRadians(Double inp){
+        if(inp<0){inp+=2*Math.PI;}
+        if(inp>2*Math.PI){inp-=2*Math.PI;}
+        return inp;
+    }
 //=============================================
 }
 
