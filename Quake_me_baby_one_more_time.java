@@ -77,7 +77,7 @@ public class Quake_me_baby_one_more_time{
             renderPanel.revalidate();
             renderPanel.repaint();
             if(frame.getWidth()!=windowSize[0]||frame.getHeight()!=windowSize[1]){frame.setSize(windowSize[0],windowSize[1]);} //set window size if off
-	    }
+        }
     }
 //=============================================
     public static void input(){
@@ -102,12 +102,12 @@ public class Quake_me_baby_one_more_time{
         int my=((int)rayy)>>6;
 
         if(keys.contains(38) || keys.contains(87)){
-            if(grid[my][mx] == 2){player.speed = speed*-1;}
-            else{player.speed = speed;}
+            if(grid[my][mx] == 2){player.speed = speed*-5;}
+            else{player.speed = 2;}
         }
         else if(keys.contains(40) || keys.contains(83)){
-            if(grid[my][mx] == 2){player.speed = speed;}
-            else{player.speed = speed*-1;}
+            if(grid[my][mx] == 2){player.speed = speed*5;}
+            else{player.speed = -2;}
         }
         else{player.speed=0;}
         player.setSpeed();
@@ -278,8 +278,8 @@ public class Quake_me_baby_one_more_time{
             this.ang=rot;
         }
         public void setSpeed(){
-            x += this.speed * Math.sin(this.ang);
-            y -= this.speed * Math.cos(this.ang);
+            x += this.speed * Math.sin(ang);
+            y -= this.speed* Math.cos(ang);
         }
         
     }
