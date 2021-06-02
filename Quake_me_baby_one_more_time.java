@@ -81,32 +81,32 @@ public class Quake_me_baby_one_more_time{
     }
 //=============================================
     public static void input(){
-        float rotationSpeed = .1f;
+        float rotationSpeed = .06f;
         if(keys.contains(37)||keys.contains(65)){ //right rotation
             player.ang-=rotationSpeed;
             if(player.ang<.0001){player.ang+=Math.PI*2;}
             player.deltaX=(float)(Math.cos(player.ang)*5); 
             player.deltaY=(float)(Math.sin(player.ang)*5); 
         }
-        if(keys.contains(39)||keys.contains(68)){ //left rotation
-            player.ang+=rotationSpeed;
+        if(keys.contains(39) || keys.contains(68)){ //left rotation
+            player.ang+= rotationSpeed;
             if(player.ang>Math.PI*2){player.ang-=Math.PI*2;}
             player.deltaX=(float)(Math.cos(player.ang)*5); 
             player.deltaY=(float)(Math.sin(player.ang)*5); 
         }
-        float speed = .0001f;
+        float speed = 1.5f;
         //TODO movemewnt uwu
-        int rayx=(int)(player.x)>>6;
-        int rayy=(int)(player.y)>>6;
-        System.out.println(rayx+"   "+rayy);
-        //int rayx = (int)player.x;
-        //int rayy = (int)player.y;
+        int rayx = (int)player.x;
+        int rayy = (int)player.y;
+        int mx=((int)rayx)>>6;
+        int my=((int)rayy)>>6;
+
         if(keys.contains(38) || keys.contains(87)){
-            if(grid[rayx][rayy] == 2){player.speed = speed*-1;}
+            if(grid[my][mx] == 2){player.speed = speed*-1;}
             else{player.speed = speed;}
         }
         else if(keys.contains(40) || keys.contains(83)){
-            if(grid[rayx][rayy] == 2){player.speed = speed;}
+            if(grid[my][mx] == 2){player.speed = speed;}
             else{player.speed = speed*-1;}
         }
         else{player.speed=0;}
