@@ -100,7 +100,7 @@ public class Quake_me_baby_one_more_time{
         int rayy = (int)player.y;
         int mx=((int)rayx)>>6;
         int my=((int)rayy)>>6;
-        System.out.println(player.ang);
+        //System.out.println(player.ang);
         if(keys.contains(38) || keys.contains(87)){
             if(grid[my][mx] == 2){player.speed = speed*-5;}
             else{player.speed = 2;}
