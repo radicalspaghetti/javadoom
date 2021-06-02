@@ -278,8 +278,8 @@ public class Quake_me_baby_one_more_time{
         }
         public void setSpeed(){
             //ang += rotationSpeed * Math.PI / 180;
-            x += speed * Math.sin(1);
-            y -= speed * Math.sin(-1);
+            x += speed * Math.sin(-1);
+            y -= speed * Math.sin(1);
         }
         
     }
