@@ -279,9 +279,9 @@ public class Quake_me_baby_one_more_time{
             this.ang=rot;
         }
         public void setSpeed(){
-            unit = ang - ((float)Math.PI*3/2);
-            x += speed * (float)Math.sin(unit);
-            y -= speed* (float)Math.cos(unit);
+            unit = ang - ((float)Math.PI/2);
+            x += -1*speed * (float)Math.sin(unit);
+            y -= -1*speed* (float)Math.cos(unit);
         }
 
         
