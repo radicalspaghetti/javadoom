@@ -73,7 +73,6 @@ public class Quake_me_baby_one_more_time{
                 delta--;
             }
             //anything unrestricted goes here
-
             renderPanel.removeAll();
             renderPanel.revalidate();
             renderPanel.repaint();
@@ -82,7 +81,7 @@ public class Quake_me_baby_one_more_time{
     }
 //=============================================
     public static void input(){
-        float rotationSpeed = .12f;
+        float rotationSpeed = .1f;
         if(keys.contains(37)||keys.contains(65)){ //right rotation
             player.ang-=rotationSpeed;
             if(player.ang<.0001){player.ang+=Math.PI*2;}
@@ -97,8 +96,11 @@ public class Quake_me_baby_one_more_time{
         }
         float speed = .0001f;
         //TODO movemewnt uwu
-        int rayx = (int)player.x;
-        int rayy = (int)player.y;
+        int rayx=(int)(player.x)>>6;
+        int rayy=(int)(player.y)>>6;
+        System.out.println(rayx+"   "+rayy);
+        //int rayx = (int)player.x;
+        //int rayy = (int)player.y;
         if(keys.contains(38) || keys.contains(87)){
             if(grid[rayx][rayy] == 2){player.speed = speed*-1;}
             else{player.speed = speed;}
