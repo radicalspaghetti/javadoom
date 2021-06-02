@@ -32,9 +32,11 @@ public class Quake_me_baby_one_more_time{
     public static Player player = new Player(317, 317,0f);
     public static ArrayList<Integer> keys = new ArrayList<Integer>();
     public static int gridSize = 64;
+    public static JFrame frame;
+    public static JPanel renderPanel;
 //=============================================
     public static void main(String[] args){
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         Container pane = frame.getContentPane();
         pane.setLayout(new BorderLayout());
         frame.setTitle("Quake Me Baby One More Time");
@@ -46,7 +48,7 @@ public class Quake_me_baby_one_more_time{
         frame.addKeyListener(input);
         frame.setFocusable(true);
         //=============================================
-        JPanel renderPanel = new JPanel() {
+        renderPanel = new JPanel() {
             public void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 draw(g2);
@@ -54,44 +56,59 @@ public class Quake_me_baby_one_more_time{
         };
         pane.add(renderPanel, BorderLayout.CENTER);
         frame.setVisible(true);
-        //main loop TODO make loop speed not dependant on system performance
-        float rotationSpeed = .00000055f;
+        Run();
+    }
+//=============================================
+    public static void Run(){
+        long lastTime = System.nanoTime();
+        final double ns = 1000000000.0/     30;//fps
+        double delta = 0;
         while(true){
-            if(keys.contains(37)||keys.contains(65)){ //right rotation
-                player.ang-=rotationSpeed;
-                if(player.ang<.0001){player.ang+=Math.PI*2;}
-                player.deltaX=(float)(Math.cos(player.ang)*5); 
-                player.deltaY=(float)(Math.sin(player.ang)*5); 
+            long now = System.nanoTime();
+            delta = delta+(now-lastTime)/ns;
+            lastTime = now;
+            while (delta>=1){
+                //anything restricted to 30fps goes here
+                input();
+                delta--;
             }
-            if(keys.contains(39)||keys.contains(68)){ //left rotation
-                player.ang+=rotationSpeed;
-                if(player.ang>Math.PI*2){player.ang-=Math.PI*2;}
-                player.deltaX=(float)(Math.cos(player.ang)*5); 
-                player.deltaY=(float)(Math.sin(player.ang)*5); 
-            }
-            float speed = .0001f;
-            //TODO movemewnt uwu
-            int rayx = (int)player.x;
-            int rayy = (int)player.y;
-            if(keys.contains(38) || keys.contains(87)){
-                if(grid[rayx][rayy] == 2){player.speed = speed*-1;}
-                else{player.speed = speed;}
-            }
-            else if(keys.contains(40) || keys.contains(83)){
-                if(grid[rayx][rayy] == 2){player.speed = speed;}
-                else{player.speed = speed*-1;}
-            }
-            else{player.speed=0;}
-            player.setSpeed();
-            
-           // System.out.println(keys.toString() +"  "+ player.rot);
-           //System.out.println(frame.getHeight()+" "+frame.getWidth());
-           //System.out.print(player.speed);
+            //anything unrestricted goes here
+
             renderPanel.removeAll();
             renderPanel.revalidate();
             renderPanel.repaint();
             if(frame.getWidth()!=windowSize[0]||frame.getHeight()!=windowSize[1]){frame.setSize(windowSize[0],windowSize[1]);} //set window size if off
+	    }
+    }
+//=============================================
+    public static void input(){
+        float rotationSpeed = .12f;
+        if(keys.contains(37)||keys.contains(65)){ //right rotation
+            player.ang-=rotationSpeed;
+            if(player.ang<.0001){player.ang+=Math.PI*2;}
+            player.deltaX=(float)(Math.cos(player.ang)*5); 
+            player.deltaY=(float)(Math.sin(player.ang)*5); 
         }
+        if(keys.contains(39)||keys.contains(68)){ //left rotation
+            player.ang+=rotationSpeed;
+            if(player.ang>Math.PI*2){player.ang-=Math.PI*2;}
+            player.deltaX=(float)(Math.cos(player.ang)*5); 
+            player.deltaY=(float)(Math.sin(player.ang)*5); 
+        }
+        float speed = .0001f;
+        //TODO movemewnt uwu
+        int rayx = (int)player.x;
+        int rayy = (int)player.y;
+        if(keys.contains(38) || keys.contains(87)){
+            if(grid[rayx][rayy] == 2){player.speed = speed*-1;}
+            else{player.speed = speed;}
+        }
+        else if(keys.contains(40) || keys.contains(83)){
+            if(grid[rayx][rayy] == 2){player.speed = speed;}
+            else{player.speed = speed*-1;}
+        }
+        else{player.speed=0;}
+        player.setSpeed();
     }
 //=============================================
     public static void draw(Graphics graphics){
@@ -99,7 +116,7 @@ public class Quake_me_baby_one_more_time{
         //draw stuff here
         drawBackground(g); 
         int[][] rays = drawMain(g); //3 D
-        drawMap(g, rays); //used for debugging, will be turned into minimap later
+        drawMap(g, rays); //minimap
     }
     //=============================================
     public static void drawBackground(Graphics2D g){
