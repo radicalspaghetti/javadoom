@@ -304,22 +304,6 @@ public class Quake_me_baby_one_more_time{
         }
     }
 //=============================================
-    public static void drawMain2(Graphics g){
-
-    }
-    public static class Player2{ //TODO: move player-related code to the player class to avoid spaghetti
-        public float x; public float y; 
-        public float ang; //rotation
-        public float deltaX = 1; public float deltaY = 1;
-        public float xPlane; public float yPlane;
-        Player2(float x,float y,float rot,float xp, float yp){
-            this.x=x;
-            this.y=y;
-            this.ang=rot;
-            this.xPlane=xp;
-            this.yPlane=yp;
-        }
-    }
     public static double CorrectRadians(Double inp){
         if(inp<0){inp+=2*Math.PI;}
         if(inp>2*Math.PI){inp-=2*Math.PI;}
